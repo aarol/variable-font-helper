@@ -1,15 +1,35 @@
-export function filterVariableFonts(data: Metadata) {
+export function filterVariableFonts(data: Metadata): Metadata {
   return {
-    axisRegistry: data.axisRegistry,
+    axisRegistry: data.axisRegistry.map(axis => ({
+      tag: axis.tag,
+      displayName: axis.displayName,
+      min: axis.min,
+      defaultValue: axis.defaultValue,
+      max: axis.max,
+      precision: axis.precision,
+      description: axis.description
+    })),
     familyMetadataList: data.familyMetadataList
-    .filter((family) => family.axes.length > 1)
+      .filter((family) => family.axes.length > 1)
+      .map(ff => {
+        return {
+          family: ff.family,
+          category: ff.category,
+          colorCapabilities: ff.colorCapabilities,
+          designers: ff.designers,
+          displayName: ff.displayName,
+          size: ff.size,
+          subsets: ff.subsets.filter(s => s !== "menu"),
+          axes: ff.axes,
+        }
+      })
   }
 }
 
 export interface Metadata {
   axisRegistry: AxisRegistry[];
   familyMetadataList: FontFamily[];
-  promotedScript: null;
+  // promotedScript: null;
 }
 
 export interface AxisRegistry {
@@ -20,22 +40,22 @@ export interface AxisRegistry {
   max: number;
   precision: number;
   description: string;
-  fallbackOnly: boolean;
-  fallbacks: Fallback[];
-  illustrationUrl?: string;
+  // fallbackOnly: boolean;
+  // fallbacks: Fallback[];
+  // illustrationUrl?: string;
 }
 
-export interface Fallback {
-  name: string;
-  value: number;
-  displayName: DisplayName;
-}
+// export interface Fallback {
+//   name: string;
+//   value: number;
+//   displayName: DisplayName;
+// }
 
-export enum DisplayName {
-  Empty = "",
-  Off = "Off",
-  On = "On",
-}
+// export enum DisplayName {
+//   Empty = "",
+//   Off = "Off",
+//   On = "On",
+// }
 
 export interface FontFamily {
   family: string;
@@ -43,18 +63,18 @@ export interface FontFamily {
   category: Category;
   size: number;
   subsets: string[];
-  fonts: { [key: string]: Font };
+  // fonts: { [key: string]: Font };
   axes: Axis[];
   designers: string[];
-  lastModified: Date;
-  dateAdded: Date;
-  popularity: number;
-  trending: number;
-  defaultSort: number;
-  androidFragment: null | string;
-  isNoto: boolean;
+  // lastModified: Date;
+  // dateAdded: Date;
+  // popularity: number;
+  // trending: number;
+  // defaultSort: number;
+  // androidFragment: null | string;
+  // isNoto: boolean;
   colorCapabilities: ColorCapability[];
-  primaryScript: PrimaryScript;
+  // primaryScript: PrimaryScript;
 }
 
 export interface Axis {
@@ -78,14 +98,14 @@ export enum ColorCapability {
   Otsvg = "OTSVG",
 }
 
-export interface Font {
-  thickness: number | null;
-  slant: number | null;
-  width: number | null;
-  lineHeight: number;
-}
+// export interface Font {
+//   thickness: number | null;
+//   slant: number | null;
+//   width: number | null;
+//   lineHeight: number;
+// }
 
-export enum PrimaryScript {
-  Arab = "Arab",
-  Empty = "",
-}
+// export enum PrimaryScript {
+//   Arab = "Arab",
+//   Empty = "",
+// }
