@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="72" height="72"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1_2)">
+<path d="M22.1064 49L13.1416 14.3535L9.89844 13.958V10.6094H22.3438V13.958L18.3623 14.5645L23.3721 35.6846L24.5322 40.6152L24.6904 40.6416L26.2197 35.7109L33.9453 10.6094H38.5068L46.3115 35.7109L47.8145 40.9316H47.9727L49.3438 35.7109L54.3008 14.5645L50.0029 13.958V10.6094H62.2373V13.958L59.2051 14.3535L50.6094 49H45.6787L37.3467 22.4219L36.292 18.5459H36.1338L35.1055 22.4219L26.7471 49H22.1064Z" fill="black"></path>
+<path d="M13 54V62H60V54" stroke="black" stroke-width="4.5"></path>
+</g>
+<defs>
+<clipPath id="SvgjsClipPath1000">
+<rect width="72" height="72" fill="white"></rect>
+</clipPath>
+</defs>
+</svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
+@media (prefers-color-scheme: dark) { :root { filter: invert(100%); } }
+</style></svg>
