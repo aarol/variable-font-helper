@@ -1,5 +1,6 @@
 import { Alert, AppShell, Autocomplete, AutocompleteItem, Button, Container, MantineProvider, Space, Text } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
+import { Footer } from "./components/Footer";
 import { IconExternalLink } from "@tabler/icons";
 import { useEffect, useMemo, useState } from "react";
 import { Axis, AxisRegistry, FontFamily, getStylesheets, getVariableFontData, Stylesheet, VariableFontData } from "./api";
@@ -144,6 +145,7 @@ function App() {
             </>
           ) : <Accordions />
           }
+          <Footer />
         </Container>
       </AppShell>
     </MantineProvider>

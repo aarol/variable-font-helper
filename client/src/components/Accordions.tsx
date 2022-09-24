@@ -1,4 +1,4 @@
-import { Accordion, Anchor, Code, Text } from "@mantine/core";
+import { Accordion, Anchor, Blockquote, Code, Text } from "@mantine/core";
 import image from '../googlefonts.png';
 
 export const Accordions = () => (
@@ -6,6 +6,10 @@ export const Accordions = () => (
     <Accordion.Item value="what">
       <Accordion.Control>What are variable fonts?</Accordion.Control>
       <Accordion.Panel>
+        <Blockquote sx={{fontSize: '1em'}}>
+          Variable fonts are an evolution of the OpenType font specification that enables many different variations of a typeface to be incorporated into a single file, rather than having a separate font file for every width, weight, or style. They let you access all the variations contained in a given font file via CSS and a single @font-face reference.
+          <br /> - MDN
+        </Blockquote>
         <Text>
           <Anchor href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide">Variable fonts on MDN</Anchor>
         </Text>
@@ -19,7 +23,7 @@ export const Accordions = () => (
       <Accordion.Panel>
         Variable fonts are supported by <Anchor href="https://caniuse.com/?search=variable%20fonts">95% of browsers</Anchor> globally.
         <Text>
-          For older browsers, set fallback fonts and use CSS feature queries or standard weights (400, 500, 800 etc.)
+          For older browsers, set fallback fonts and use CSS @supports(font-variation-settings: normal) or just use standard weights (400, 500, 800 etc.)
         </Text>
       </Accordion.Panel>
     </Accordion.Item>
@@ -52,6 +56,7 @@ export const Accordions = () => (
         <Text py="sm">
           Now copy the font-faces and download the fonts for every subset you need.
         </Text>
+        This app just makes the same process easier and quicker.
       </Accordion.Panel>
     </Accordion.Item>
   </Accordion>

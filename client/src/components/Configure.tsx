@@ -51,7 +51,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
 
   const [fineTune, setFineTune] = useState(false)
 
-  useEffect(onChange, [state,subsets])
+  useEffect(onChange, [state, subsets])
 
   function onSubmit() {
 
@@ -64,7 +64,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
   }
 
   function handleSetMode(mode: "simple" | "advanced") {
-    if (mode === "simple") {
+    if (mode === "simple" && isFixed(state["wght"].value)) {
       state["wght"] = {
         ...state["wght"],
         active: true,
@@ -112,9 +112,9 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
               <Text>Weight</Text>
             </Group>
             <RangeSlider
-              min={100}
-              minRange={0}
-              max={1000}
+              min={state['wght'].min}
+              minRange={1}
+              max={state['wght'].max}
               step={calcSteps(fineTune, state['wght'].min, state['wght'].max)}
               value={state['wght'].value as [number, number]} // type is set in `handleSetMode` 
               onChange={(v) => setAxisValue('wght', {
@@ -125,7 +125,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
           {state["slnt"] !== undefined && (
             <Container py="md">
               <Checkbox
-                label="Slant (Italic)"
+                label="Slant"
                 checked={state["slnt"].active}
                 onChange={(e) => setAxisValue("slnt", {
                   active: e.target.checked,
