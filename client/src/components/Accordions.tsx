@@ -1,5 +1,5 @@
-import { Accordion, Anchor, Code, List, Text } from "@mantine/core";
-import image from '../googlefonts.png'
+import { Accordion, Anchor, Code, Text } from "@mantine/core";
+import image from '../googlefonts.png';
 
 export const Accordions = () => (
   <Accordion>

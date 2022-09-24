@@ -1,4 +1,4 @@
-import { Button, Checkbox, Chip, Container, Divider, Group, RangeSlider, SegmentedControl, Slider, Space, Text, Title } from "@mantine/core";
+import { Button, Checkbox, Chip, Container, DefaultMantineColor, Divider, Group, RangeSlider, SegmentedControl, Slider, Space, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Axis, AxisRegistry, FontFamily } from "../api";
 import { firstLetterUppercase } from "../util";
@@ -37,7 +37,7 @@ function initialAxisState(axes: AxisRegistry[]): AxisState {
 type ConfigureProps = {
   font: FontFamily,
   axes: AxisRegistry[],
-  submitColor: 'indigo' | 'gray',
+  submitColor: DefaultMantineColor | undefined,
   onGenerate: (axis: Axis[], subsets: string[]) => void,
   onChange: () => void,
 }

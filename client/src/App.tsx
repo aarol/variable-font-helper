@@ -1,5 +1,6 @@
-import { Alert, Anchor, AppShell, Autocomplete, AutocompleteItem, Button, Checkbox, Chip, Container, Divider, Group, MantineProvider, RangeSlider, SegmentedControl, Slider, Space, Text, Title } from "@mantine/core";
+import { Alert, AppShell, Autocomplete, AutocompleteItem, Button, Container, MantineProvider, Space, Text } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
+import { IconExternalLink } from "@tabler/icons";
 import { useEffect, useMemo, useState } from "react";
 import { Axis, AxisRegistry, FontFamily, getStylesheets, getVariableFontData, Stylesheet, VariableFontData } from "./api";
 import { Accordions } from "./components/Accordions";
@@ -8,7 +9,6 @@ import { FontTitle } from "./components/FontTitle";
 import { Instructions } from "./components/Instructions";
 import { Output } from "./components/Output";
 import { firstLetterUppercase } from "./util";
-
 
 function App() {
 
@@ -93,6 +93,7 @@ function App() {
       headings: {
         fontFamily: 'Inter, sans-serif'
       },
+      primaryColor: 'indigo'
     }} withNormalizeCSS withGlobalStyles>
       <AppShell padding={"xl"}>
         <Container size="sm">
@@ -119,19 +120,18 @@ function App() {
               <Text size="xl">{font.family}</Text>
               <Text>By {font.designers.join(", ")}</Text>
 
-              <Anchor target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`}>
-                <Text size="lg">
-                  Type tester
-                </Text>
-              </Anchor>
+
+              <Button component="a" target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`} my="sm" variant="outline" leftIcon={<IconExternalLink size={14} />}>
+                Type tester
+              </Button>
 
               <Instructions />
 
               <Configure
-                key={font.family}
+                key={font.family} // refresh on font family change, without key state is kept
                 axes={fontAxes}
                 font={font}
-                submitColor={stylesheets.length !== 0 ? 'gray' : 'indigo'}
+                submitColor={stylesheets.length !== 0 ? 'gray' : undefined}
                 onGenerate={onGenerate}
                 onChange={onConfigChange} />
 

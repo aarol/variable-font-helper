@@ -17,8 +17,8 @@ export type Stylesheet = {
 }
 
 export async function getStylesheets(font: string, charsets: string[], axes: Axis[]): Promise<Stylesheet[]> {
-  const url = await buildCSS2Url(font, axes)
-  const res = await (await fetch(url)).text()
+  const url = buildCSS2Url(font, axes)
+  const res = await fetch(url).then(r => r.text())
 
   const matches = [...res.matchAll(subsetRegex)]
   return matches.map((match) => ({
@@ -34,7 +34,7 @@ export type Axis = {
 }
 
 // CSS2 API: https://developers.google.com/fonts/docs/css2#api_url_specification
-async function buildCSS2Url(font: string, axes: Axis[]) {
+function buildCSS2Url(font: string, axes: Axis[]) {
 
   if (axes.length === 0) {
     return `https://fonts.googleapis.com/css2?family=${font}&display=swap`
@@ -59,70 +59,68 @@ async function buildCSS2Url(font: string, axes: Axis[]) {
 
 export async function downloadAllFiles(fontName: string, styles: Stylesheet[]) {
 
-  // keep the font subset with the blob
-  const downloadStyle = async (style: Stylesheet) => {
-    const res = await fetch(style.url)
-    return ({ ...style, blob: await res.blob() })
-  }
-  const fonts = await Promise.all(styles.map(downloadStyle))
+  const download = (s: Stylesheet) => fetch(s.url).then(r => r.blob()) 
+
+  const fonts = await Promise.all(styles.map(download))
   const zip = jsZip()
 
   // omit the subset on one font
   if (styles.length === 1) {
-    zip.file(`${fontName}.woff2`, fonts[0].blob)
+    zip.file(`${fontName}.woff2`, fonts[0])
   } else {
-    fonts.forEach((font) => {
-      zip.file(`${fontName}-${font.subset}.woff2`, font.blob)
+    fonts.forEach((font, i) => {
+      zip.file(`${fontName}-${styles[i].subset}.woff2`, font)
     })
   }
+
   zip.generateAsync({ type: 'blob' }).then(zipFile => {
     fileSaver.saveAs(zipFile, `${fontName}.zip`)
   })
 }
 
+// copied from stack overflow
 const sortLowercaseFirst = (a: string, b: string) => {
   if (a[0] === a[0].toLocaleLowerCase() && b[0] === b[0].toLocaleLowerCase() ||
     a[0] === a[0].toLocaleUpperCase() && b[0] === b[0].toLocaleUpperCase()) {
-    return a.localeCompare(b);
+    return a.localeCompare(b)
   }
   if (a[0] === a[0].toLocaleLowerCase()) {
-    return -1;
+    return -1
   }
-  return 1;
+  return 1
 }
 
 export interface VariableFontData {
-  axisRegistry: AxisRegistry[];
-  familyMetadataList: FontFamily[];
+  axisRegistry: AxisRegistry[]
+  familyMetadataList: FontFamily[]
 }
 
 export interface AxisRegistry {
-  tag: string;
-  // displayName:  string;
-  min: number;
-  defaultValue: number;
-  max: number;
-  precision: number;
-  description: string;
+  tag: string
+  min: number
+  defaultValue: number
+  max: number
+  precision: number
+  description: string
 }
 
 export interface FontFamily {
-  family: string;
-  category: Category;
-  colorCapabilities: string[];
-  designers: string[];
-  displayName: null;
-  size: number;
-  subsets: string[];
-  axes: FontAxis[];
+  family: string
+  category: Category
+  colorCapabilities: string[]
+  designers: string[]
+  displayName: null
+  size: number
+  subsets: string[]
+  axes: FontAxis[]
   popularity: number,
 }
 
 export interface FontAxis {
-  tag: string;
-  min: number;
-  max: number;
-  defaultValue: number;
+  tag: string
+  min: number
+  max: number
+  defaultValue: number
 }
 
 export enum Category {

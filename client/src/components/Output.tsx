@@ -1,7 +1,7 @@
 import { Anchor, Button, Group, List, Text, TextInput, Title } from '@mantine/core'
 import { lazy, Suspense, useState } from 'react'
 import { downloadAllFiles, Stylesheet } from '../api'
-const Prism = lazy(() => import('../components/CSSHighlight'))
+const Prism = lazy(() => import('./Prism'))
 
 const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) => {
   if (styles.length == 0) return ''
@@ -35,11 +35,11 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
         ))}
       </List>
       <Group py="md">
-        <Button color="indigo" onClick={downloadFonts}>Download All</Button>
+        <Button onClick={downloadFonts}>Download All</Button>
       </Group>
       <TextInput value={url} label="CSS import url" onChange={(e) => setUrl(e.target.value)} />
       <Suspense fallback={<Text>Loading...</Text>}>
-        <Prism>
+        <Prism language='css'>
           {renderStylesheets(styles, url, fontName)}
         </Prism>
       </Suspense>
