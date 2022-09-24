@@ -1,16 +1,16 @@
 export function filterVariableFonts(data: Metadata): Metadata {
   return {
-    axisRegistry: data.axisRegistry.map(axis => ({
-      tag: axis.tag,
-      displayName: axis.displayName,
-      min: axis.min,
-      defaultValue: axis.defaultValue,
-      max: axis.max,
-      precision: axis.precision,
-      description: axis.description
+    axisRegistry: data.axisRegistry.map(ax => ({
+      tag: ax.tag,
+      displayName: ax.displayName,
+      min: ax.min,
+      defaultValue: ax.defaultValue,
+      max: ax.max,
+      precision: ax.precision,
+      description: ax.description
     })),
     familyMetadataList: data.familyMetadataList
-      .filter((family) => family.axes.length > 1)
+      .filter((family) => family.axes.length > 1) // variable fonts only
       .map(ff => {
         return {
           family: ff.family,
@@ -21,8 +21,10 @@ export function filterVariableFonts(data: Metadata): Metadata {
           size: ff.size,
           subsets: ff.subsets.filter(s => s !== "menu"),
           axes: ff.axes,
+          popularity: ff.popularity,
         }
       })
+      .sort((a,b) => a.popularity - b.popularity) // sort by popularity
   }
 }
 
@@ -68,7 +70,7 @@ export interface FontFamily {
   designers: string[];
   // lastModified: Date;
   // dateAdded: Date;
-  // popularity: number;
+  popularity: number;
   // trending: number;
   // defaultSort: number;
   // androidFragment: null | string;

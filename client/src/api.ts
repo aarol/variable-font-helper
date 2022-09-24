@@ -3,11 +3,9 @@ import fileSaver from 'file-saver'
 
 export async function getVariableFontData() {
   const url = "https://us-central1-variable-font-helper.cloudfunctions.net/getMetadata"
-  // const url = "http://localhost:5001/variable-font-helper/us-central1/getMetadata"
-  const res = await fetch(url, { method: "POST", cache: "force-cache" })
+  const res = await fetch(url, { method: "GET", cache: "force-cache" })
   return await res.json() as VariableFontData
 }
-
 
 // get the charset and url in separate groups
 const subsetRegex = /\/\*(.*)\*\/[\s\S]*?url\((.*?)\)[\s\S]*?}/g
@@ -30,19 +28,25 @@ export async function getStylesheets(font: string, charsets: string[], axes: Axi
   })).filter(sheet => charsets.includes(sheet.subset))
 }
 
-type Axis = {
+export type Axis = {
   tag: string,
   weight: number | [number, number]
 }
 
 // CSS2 API: https://developers.google.com/fonts/docs/css2#api_url_specification
 async function buildCSS2Url(font: string, axes: Axis[]) {
+
+  if (axes.length === 0) {
+    return `https://fonts.googleapis.com/css2?family=${font}&display=swap`
+  }
+
   font = font.replace(' ', '+')
 
   // axes need to be sorted alphabetically, lowercase first or else it will error
   axes.sort((a, b) => sortLowercaseFirst(a.tag, b.tag))
 
   const axisList = axes.map(a => a.tag).join(',')
+
   const axisValues = axes.map(a => {
     if (typeof (a.weight) == 'number') {
       return a.weight.toString()
@@ -60,7 +64,6 @@ export async function downloadAllFiles(fontName: string, styles: Stylesheet[]) {
     const res = await fetch(style.url)
     return ({ ...style, blob: await res.blob() })
   }
-
   const fonts = await Promise.all(styles.map(downloadStyle))
   const zip = jsZip()
 
@@ -89,35 +92,36 @@ const sortLowercaseFirst = (a: string, b: string) => {
 }
 
 export interface VariableFontData {
-  axisRegistry:       AxisRegistry[];
+  axisRegistry: AxisRegistry[];
   familyMetadataList: FontFamily[];
 }
 
 export interface AxisRegistry {
-  tag:          string;
-  displayName:  string;
-  min:          number;
+  tag: string;
+  // displayName:  string;
+  min: number;
   defaultValue: number;
-  max:          number;
-  precision:    number;
-  description:  string;
+  max: number;
+  precision: number;
+  description: string;
 }
 
 export interface FontFamily {
-  family:            string;
-  category:          Category;
+  family: string;
+  category: Category;
   colorCapabilities: string[];
-  designers:         string[];
-  displayName:       null;
-  size:              number;
-  subsets:           string[];
-  axes:              Axe[];
+  designers: string[];
+  displayName: null;
+  size: number;
+  subsets: string[];
+  axes: FontAxis[];
+  popularity: number,
 }
 
-export interface Axe {
-  tag:          string;
-  min:          number;
-  max:          number;
+export interface FontAxis {
+  tag: string;
+  min: number;
+  max: number;
   defaultValue: number;
 }
 

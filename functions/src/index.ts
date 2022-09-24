@@ -14,7 +14,9 @@ export const getMetadata = functions.https.onRequest((async (request, response) 
     await Axios.get(url, { headers: {"User-Agent": "variable-font-helper.web.app"}})
       .then((res) => {
         const fonts = filterVariableFonts(res.data as Metadata)
-        response.set("Cache-Control", "public, max-age=604800, s-maxage=604800");
+        // cache for 1 day
+        // on client AND cdn, so response is cached even if function is redeployed
+        response.set("Cache-Control", "public, max-age=86400, s-maxage=86400");
         response.send(fonts)
       })
       .catch((err) => {
