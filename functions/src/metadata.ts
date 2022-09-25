@@ -10,7 +10,7 @@ export function filterVariableFonts(data: Metadata): Metadata {
       description: ax.description
     })),
     familyMetadataList: data.familyMetadataList
-      .filter((family) => family.axes.length > 1) // variable fonts only
+      .filter((family) => family.axes.length > 0) // variable fonts only
       .map(ff => {
         return {
           family: ff.family,
