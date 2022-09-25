@@ -1,4 +1,4 @@
-import { Alert, AppShell, Autocomplete, AutocompleteItem, Button, Container, MantineProvider, Space, Text } from "@mantine/core";
+import { Alert, Anchor, AppShell, Autocomplete, AutocompleteItem, Button, Container, MantineProvider, Space, Text } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import { Footer } from "./components/Footer";
 import { IconExternalLink } from "@tabler/icons";
@@ -99,11 +99,13 @@ function App() {
       <AppShell padding={"xl"}>
         <Container size="sm">
           <FontTitle />
-          <Text align="center" pb="md">Self host variable fonts from Google Fonts</Text>
+          <Text align="center" pb="md">Self host variable fonts from
+           <Anchor href="https://fonts.google.com/?vfonly=true" target="_blank"> Google Fonts</Anchor>
+           </Text>
 
           <Autocomplete
             data={fontData?.familyMetadataList.map(f => ({ value: f.family })) ?? []}
-            label="Choose your variable font"
+            label="Select your variable font"
             placeholder="Roboto Flex"
             onItemSubmit={onSelectFont}
           />

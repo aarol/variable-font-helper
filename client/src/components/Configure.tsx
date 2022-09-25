@@ -91,7 +91,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
   return (
     <>
       <Space h="md" />
-      <Title order={2}>Axes</Title>
+      <Title order={2} pb="sm">Configure</Title>
 
       <Group>
         <SegmentedControl
