@@ -42,9 +42,8 @@ function App() {
     }
 
     getVariableFontData()
-      .then((metadata) => {
-        setFontData(metadata)
-      }).catch((err: Object) => {
+      .then(setFontData)
+      .catch((err: Object) => {
         console.log(err)
         setAlert({
           title: "Failed to get font data",
@@ -106,6 +105,7 @@ function App() {
           <Autocomplete
             data={fontData?.familyMetadataList.map(f => ({ value: f.family })) ?? []}
             label="Select your variable font"
+            size="md"
             placeholder="Roboto Flex"
             onItemSubmit={onSelectFont}
           />
