@@ -12,7 +12,7 @@ export function FontTitle() {
       <Slider
         size="sm"
         pb="lg"
-        sx={{ maxWidth: 200, marginInline: 'auto' }}
+        sx={{ maxWidth: 200, margin: '0 auto' }}
         label={null}
         value={titleSize}
         min={100}
