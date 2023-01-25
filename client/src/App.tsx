@@ -15,10 +15,13 @@ function App() {
 
   const [alert, setAlert] = useState<{ title: string, content: string } | null>(null)
 
+  // Data from API
   const [fontData, setFontData] = useState<VariableFontData | null>(null)
 
+  // Currently selected font
   const [font, setFont] = useState<FontFamily | undefined>()
 
+  // Output CSS
   const [stylesheets, setStylesheets] = useState<Stylesheet[]>([])
 
   const fontAxes: AxisRegistry[] = useMemo(() => {
@@ -55,16 +58,16 @@ function App() {
   const onSelectFont = (item: AutocompleteItem) => {
     setFont(fontData?.familyMetadataList.find(a => a.family === item.value))
 
-    setStylesheets([])
+    resetOutput()
   }
 
-  const onConfigChange = () => {
+  const resetOutput = () => {
     setStylesheets([])
   }
 
   const onGenerate = (axes: Axis[], subsets: string[]) => {
+    resetOutput()
 
-    setStylesheets([])
     setAlert(null)
 
     if (subsets.length === 0) {
@@ -131,12 +134,12 @@ function App() {
               <Instructions />
 
               <Configure
-                key={font.family} // refresh on font family change, without key state is kept
+                key={font.family} // to refresh config on font family change
                 axes={fontAxes}
                 font={font}
                 submitColor={stylesheets.length !== 0 ? 'gray' : undefined}
                 onGenerate={onGenerate}
-                onChange={onConfigChange} />
+                onChange={resetOutput} />
 
               {stylesheets.length > 0 && (
                 <Output styles={stylesheets}

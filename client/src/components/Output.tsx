@@ -11,6 +11,7 @@ const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) 
   } else {
     return styles.map(style =>
       style.raw.replace(style.url,
+        // replace generic url with that of the subset
         url.replace(fontName, `${fontName}-${style.subset}`) // subset after font name
       )
     ).join('\n')
