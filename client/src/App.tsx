@@ -1,7 +1,7 @@
 import { Alert, Anchor, AppShell, Autocomplete, AutocompleteItem, Button, Container, MantineProvider, Space, Text } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import { Footer } from "./components/Footer";
-import { IconExternalLink } from "@tabler/icons";
+import { IconExternalLink } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 import { Axis, AxisRegistry, FontFamily, getStylesheets, getVariableFontData, Stylesheet, VariableFontData } from "./api";
 import { Accordions } from "./components/Accordions";
@@ -99,8 +99,8 @@ function App() {
         <Container size="sm">
           <FontTitle />
           <Text align="center" pb="md">Self host variable fonts from
-           <Anchor href="https://fonts.google.com/?vfonly=true" target="_blank"> Google Fonts</Anchor>
-           </Text>
+            <Anchor href="https://fonts.google.com/?vfonly=true" target="_blank"> Google Fonts</Anchor>
+          </Text>
 
           <Autocomplete
             data={fontData?.familyMetadataList.map(f => ({ value: f.family })) ?? []}

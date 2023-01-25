@@ -1,5 +1,5 @@
 import { Anchor, Container, Group, Text } from "@mantine/core"
-import { IconBrandGithub } from '@tabler/icons'
+import { IconBrandGithub } from '@tabler/icons-react'
 export const Footer = () => (
 
   <Container py="md">
