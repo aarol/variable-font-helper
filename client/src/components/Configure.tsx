@@ -125,7 +125,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
           {state["slnt"] !== undefined && (
             <Container py="md">
               <Checkbox
-                label="Slant"
+                label="Slant (italic)"
                 checked={state["slnt"].active}
                 onChange={(e) => setAxisValue("slnt", {
                   active: e.target.checked,
@@ -182,10 +182,12 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       )}
       <Text>Character sets (default: Latin)</Text>
 
-      <Chip.Group multiple value={subsets} onChange={setSubsets} py="md">
-        {font.subsets.map(subset => (
-          <Chip key={subset} value={subset}>{firstLetterUppercase(subset)}</Chip>
-        ))}
+      <Chip.Group multiple value={subsets} onChange={setSubsets}>
+        <Group spacing={6} py="sm">
+          {font.subsets.map(subset => (
+            <Chip key={subset} value={subset}>{firstLetterUppercase(subset)}</Chip>
+          ))}
+        </Group>
       </Chip.Group>
 
       <Divider py="md" />

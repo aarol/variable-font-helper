@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/getMetadata": {
-        target: "https://us-central1-variable-font-helper.cloudfunctions.net/getMetadata",
+        target: "http://us-central1-variable-font-helper.cloudfunctions.net",
+        changeOrigin: true,
       }
     }
   }
