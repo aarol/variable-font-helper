@@ -20,6 +20,32 @@
 3. When `Generate Output` is pressed, the client will send a request to the [Google Fonts CSS2 API](https://developers.google.com/fonts/docs/css2#api_url_specification) and extract the font url and stylesheet from each subset using a regexp.
 4. Clicking `Download All` will `fetch` all selected subsets and turn them into a zip archive using [jsZip](https://www.npmjs.com/package/jszip) in-browser.
 
+## Run locally
+
+### Client
+
+In the "client" directory:
+
+`pnpm i && pnpm dev`
+
+Note: the dev server will call the deployed Cloud Function (see client/vite.config.ts)
+
+### Functions
+
+1. Install firebase-tools
+
+`pnpm add -g firebase-tools`
+
+2. In the "functions" directoy:
+
+`pnpm i`
+
+3. Then, at the root directory:
+
+`firebase emulators:start --only functions`
+
+Now you can open the Emulator suite and check the function.
+
 ## Contributing
 
 Issues/pull requests are welcome!
