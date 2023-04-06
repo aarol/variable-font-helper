@@ -2,7 +2,7 @@ import jsZip from 'jszip'
 import fileSaver from 'file-saver'
 
 export async function getVariableFontData() {
-  const url = "https://us-central1-variable-font-helper.cloudfunctions.net/getMetadata"
+  const url = "/getMetadata"
   const res = await fetch(url, { method: "GET", cache: "force-cache" })
   return await res.json() as VariableFontData
 }

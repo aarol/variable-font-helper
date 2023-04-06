@@ -24,8 +24,8 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/getMetadata",
+        "function": "getMetadata"
       }
     ]
   }
