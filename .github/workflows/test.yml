@@ -6,13 +6,17 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    defaults:
+      run: 
+        working-directory: '/client'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'pnpm'
       - run: npm i -g pnpm
-      - run: cd client && pnpm install
+      - run: pnpm install
       - name: Cypress run
         uses: cypress-io/github-action@v5
