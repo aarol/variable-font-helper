@@ -183,7 +183,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       <Text>Character sets (default: Latin)</Text>
 
       <Chip.Group multiple value={subsets} onChange={setSubsets}>
-        <Group spacing={6} py="sm">
+        <Group spacing="sm" py="sm">
           {font.subsets.map(subset => (
             <Chip key={subset} value={subset}>{firstLetterUppercase(subset)}</Chip>
           ))}
