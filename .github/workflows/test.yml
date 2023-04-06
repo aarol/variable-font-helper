@@ -15,7 +15,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
       - run: npm i -g pnpm
       - run: pnpm install
       - name: Cypress run
