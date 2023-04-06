@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 18
       - run: npm i -g pnpm
-      - run: pnpm install
+      - run: pnpm install && (pnpm dev &)
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
