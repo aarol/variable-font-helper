@@ -3,10 +3,8 @@
 describe('web app', () => {
   it('can output font css', () => {
     cy.visit('/')
-    cy.get("input").last().focus().type("Inter")
+    cy.get("input").last().focus().type("Inter{downArrow}{enter}")
     
-    cy.get('#mantine-r1-0').click()
-
     cy.get("[data-checked=true]").contains("Latin")
     cy.get("button").last().click()
     cy.get("main").contains("Output")
