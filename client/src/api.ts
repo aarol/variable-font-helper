@@ -19,7 +19,6 @@ export type Stylesheet = {
 export async function getStylesheets(font: string, charsets: string[], axes: Axis[]): Promise<Stylesheet[]> {
   const url = buildCSS2Url(font, axes)
   const res = await fetch(url).then(r => r.text())
-
   const matches = [...res.matchAll(subsetRegex)]
   return matches.map((match) => ({
     raw: match[0],

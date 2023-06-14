@@ -39,7 +39,7 @@ function App() {
     if (!CSS.supports("font-variation-settings", `"wght" 123`)) {
       setAlert({
         title: "Variable fonts not supported",
-        content: "Variable fonts don't seem to be supported in this browser. " +
+        content: "Variable fonts don't seem to be supported by your browser. " +
           "Make sure variable fonts are supported by your browser and operating system."
       })
     }
