@@ -16,4 +16,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
-          start: pnpm -r run dev
+          start: pnpm dev, pnpm -C ../functions dev
+          working-directory: ./client
+          wait-on: 'http://localhost:5001, http://localhost:5173'
