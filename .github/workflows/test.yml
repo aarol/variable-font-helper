@@ -17,6 +17,7 @@ jobs:
           run_install: |
             - recursive: true
 
+      - run: pnpm i -g firebase
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
