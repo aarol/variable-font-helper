@@ -120,7 +120,8 @@ export function filterMetadata(data: GFMetadata): Metadata {
         axes: f.axes,
         designers: f.designers,
         family: f.family,
-        subsets: f.subsets,
+        // I don't know what menu is but it's not a real subset
+        subsets: f.subsets.filter(s => s != "menu"),
         popularity: f.popularity,
         // some fonts have an italic variant separate from the "slant" property
         hasItalic: Object.keys(f.fonts).some(w => w.endsWith("i")),
