@@ -3,6 +3,9 @@
 describe('web app', () => {
   it('outputs css for font subsets', () => {
     cy.visit('/')
+
+    cy.request("/getMetadata")
+    
     cy.get("input").last().focus().type("Inter{downArrow}{enter}")
 
     cy.get("input[value=latin-ext]").parent().click()
