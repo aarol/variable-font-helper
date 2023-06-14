@@ -6,7 +6,7 @@ describe('web app', () => {
 
     cy.request("/getMetadata")
     
-    cy.get("input").last().focus().type("Inter{downArrow}{enter}")
+    cy.get("input").last().focus().type("Inter{downArrow}{enter}", {delay: 200})
 
     cy.get("input[value=latin-ext]").parent().click()
 
@@ -25,7 +25,10 @@ describe('web app', () => {
 
   it('outputs italic fonts', () => {
     cy.visit('/')
-    cy.get("input").last().focus().type("Inter Tight{downArrow}{enter}")
+
+    cy.request("/getMetadata")
+
+    cy.get("input").last().focus().type("Inter Tight{downArrow}{enter}", {delay: 200})
 
     cy.get("input[value=latin-ext]").parent().click()
 
