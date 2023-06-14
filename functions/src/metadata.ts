@@ -1,113 +1,130 @@
-export function filterVariableFonts(data: Metadata): Metadata {
+import * as z from "zod";
+
+// generated with https://app.quicktype.io/
+
+export const DisplayNameSchema = z.enum([
+  "",
+  "Off",
+  "On",
+]);
+export type DisplayName = z.infer<typeof DisplayNameSchema>;
+
+
+export const CategorySchema = z.enum([
+  "Display",
+  "Handwriting",
+  "Monospace",
+  "Sans Serif",
+  "Serif",
+]);
+export type Category = z.infer<typeof CategorySchema>;
+
+export const ColorCapabilitySchema = z.enum([
+  "COLRV0",
+  "COLRV1",
+  "OTSVG",
+]);
+export type ColorCapability = z.infer<typeof ColorCapabilitySchema>;
+
+export const FontSchema = z.object({
+  "thickness": z.union([z.number(), z.null()]),
+  "slant": z.union([z.number(), z.null()]),
+  "width": z.union([z.number(), z.null()]),
+  "lineHeight": z.number(),
+});
+export type Font = z.infer<typeof FontSchema>;
+
+export const AxisSchema = z.object({
+  "tag": z.string(),
+  "min": z.number(),
+  "max": z.number(),
+  "defaultValue": z.number(),
+});
+export type Axis = z.infer<typeof AxisSchema>;
+
+const GFFontFamilySchema = z.object({
+  "family": z.string(),
+  "displayName": z.union([z.null(), z.string()]),
+  "category": CategorySchema,
+  "size": z.number(),
+  "subsets": z.array(z.string()),
+  "fonts": z.record(z.string(), FontSchema),
+  "axes": z.array(AxisSchema),
+  "designers": z.array(z.string()),
+  "lastModified": z.string(),
+  "dateAdded": z.string(),
+  "popularity": z.number(),
+  "trending": z.number(),
+  "defaultSort": z.number(),
+  "androidFragment": z.union([z.null(), z.string()]),
+  "isNoto": z.boolean(),
+  "colorCapabilities": z.array(ColorCapabilitySchema),
+  "primaryScript": z.string(),
+  "primaryLanguage": z.string(),
+});
+type GFFontFamily = z.infer<typeof GFFontFamilySchema>;
+
+export type FontFamily = Pick<GFFontFamily, "family" | "subsets" | "axes" | "designers" | "popularity"> & {
+  hasItalic: boolean,
+}
+
+export const FallbackSchema = z.object({
+  "name": z.string(),
+  "value": z.number(),
+  "displayName": DisplayNameSchema,
+});
+export type Fallback = z.infer<typeof FallbackSchema>;
+
+const GFAxisRegistrySchema = z.object({
+  "tag": z.string(),
+  "displayName": z.string(),
+  "min": z.number(),
+  "defaultValue": z.number(),
+  "max": z.number(),
+  "precision": z.number(),
+  "description": z.string(),
+  "fallbackOnly": z.boolean(),
+  "fallbacks": z.array(FallbackSchema),
+  "illustrationUrl": z.union([z.null(), z.string()]).optional(),
+});
+type GFAxisRegistry = z.infer<typeof GFAxisRegistrySchema>;
+
+export type AxisRegistry = Pick<GFAxisRegistry, "tag" | "displayName" | "min" | "max" | "precision" | "description" | "defaultValue">
+
+export const GFMetadataSchema = z.object({
+  "axisRegistry": z.array(GFAxisRegistrySchema),
+  "familyMetadataList": z.array(GFFontFamilySchema),
+  "promotedScript": z.null(),
+});
+type GFMetadata = z.infer<typeof GFMetadataSchema>;
+
+export type Metadata = {
+  axisRegistry: AxisRegistry[],
+  familyMetadataList: FontFamily[],
+}
+
+export function filterMetadata(data: GFMetadata): Metadata {
   return {
-    axisRegistry: data.axisRegistry.map(ax => ({
-      tag: ax.tag,
-      displayName: ax.displayName,
-      min: ax.min,
-      defaultValue: ax.defaultValue,
-      max: ax.max,
-      precision: ax.precision,
-      description: ax.description
+    axisRegistry: data.axisRegistry.map(a => ({
+      displayName: a.displayName,
+      description: a.description,
+      tag: a.tag,
+      min: a.min,
+      max: a.max,
+      defaultValue: a.defaultValue,
+      precision: a.precision,
     })),
     familyMetadataList: data.familyMetadataList
       .filter((family) => family.axes.length > 0) // variable fonts only
-      .map(ff => {
-        return {
-          family: ff.family,
-          category: ff.category,
-          colorCapabilities: ff.colorCapabilities,
-          designers: ff.designers,
-          displayName: ff.displayName,
-          size: ff.size,
-          subsets: ff.subsets.filter(s => s !== "menu"),
-          axes: ff.axes,
-          popularity: ff.popularity,
-        }
-      })
-      .sort((a,b) => a.popularity - b.popularity) // sort by popularity
+      .map(f => ({
+        axes: f.axes,
+        designers: f.designers,
+        family: f.family,
+        subsets: f.subsets,
+        popularity: f.popularity,
+        // some fonts have an italic variant separate from the "slant" property
+        hasItalic: Object.keys(f.fonts).some(w => w.endsWith("i")),
+      }))
+      .sort((a, b) => a.popularity - b.popularity)
   }
 }
-
-export interface Metadata {
-  axisRegistry: AxisRegistry[];
-  familyMetadataList: FontFamily[];
-  // promotedScript: null;
-}
-
-export interface AxisRegistry {
-  tag: string;
-  displayName: string;
-  min: number;
-  defaultValue: number;
-  max: number;
-  precision: number;
-  description: string;
-  // fallbackOnly: boolean;
-  // fallbacks: Fallback[];
-  // illustrationUrl?: string;
-}
-
-// export interface Fallback {
-//   name: string;
-//   value: number;
-//   displayName: DisplayName;
-// }
-
-// export enum DisplayName {
-//   Empty = "",
-//   Off = "Off",
-//   On = "On",
-// }
-
-export interface FontFamily {
-  family: string;
-  displayName: null | string;
-  category: Category;
-  size: number;
-  subsets: string[];
-  // fonts: { [key: string]: Font };
-  axes: Axis[];
-  designers: string[];
-  // lastModified: Date;
-  // dateAdded: Date;
-  popularity: number;
-  // trending: number;
-  // defaultSort: number;
-  // androidFragment: null | string;
-  // isNoto: boolean;
-  colorCapabilities: ColorCapability[];
-  // primaryScript: PrimaryScript;
-}
-
-export interface Axis {
-  tag: string;
-  min: number;
-  max: number;
-  defaultValue: number;
-}
-
-export enum Category {
-  Display = "Display",
-  Handwriting = "Handwriting",
-  Monospace = "Monospace",
-  SansSerif = "Sans Serif",
-  Serif = "Serif",
-}
-
-export enum ColorCapability {
-  Colrv0 = "COLRV0",
-  Colrv1 = "COLRV1",
-  Otsvg = "OTSVG",
-}
-
-// export interface Font {
-//   thickness: number | null;
-//   slant: number | null;
-//   width: number | null;
-//   lineHeight: number;
-// }
-
-// export enum PrimaryScript {
-//   Arab = "Arab",
-//   Empty = "",
-// }
