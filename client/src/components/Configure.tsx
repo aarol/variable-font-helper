@@ -1,7 +1,8 @@
-import { Button, Checkbox, Chip, Container, DefaultMantineColor, Divider, Group, RangeSlider, SegmentedControl, Slider, Space, Text, Title } from "@mantine/core";
+import { Button, Checkbox, Chip, Container, DefaultMantineColor, Divider, Group, RangeSlider, SegmentedControl, Slider, Space, Text, Title, Tooltip } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Axis, AxisRegistry, FontFamily } from "../api";
+import { Axis, } from "../api";
 import { firstLetterUppercase } from "../util";
+import { AxisRegistry, FontFamily } from "../../../functions/src/metadata";
 
 export type AxisState = {
   [tag: string]: {
@@ -38,7 +39,7 @@ type ConfigureProps = {
   font: FontFamily,
   axes: AxisRegistry[],
   submitColor: DefaultMantineColor | undefined,
-  onGenerate: (axis: Axis[], subsets: string[]) => void,
+  onGenerate: (axis: Axis[], subsets: string[], italic: boolean) => void,
   onChange: () => void,
 }
 
@@ -51,7 +52,9 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
 
   const [fineTune, setFineTune] = useState(false)
 
-  useEffect(onChange, [state, subsets])
+  const [italic, setItalic] = useState<boolean | undefined>()
+
+  useEffect(onChange, [state, subsets, italic])
 
   function onSubmit() {
 
@@ -60,7 +63,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       .map(([tag, v]) => ({ tag, weight: v.value })) // tag and weight
     console.log(axis);
 
-    onGenerate(axis, subsets)
+    onGenerate(axis, subsets, italic ?? false)
   }
 
   function handleSetMode(mode: "simple" | "advanced") {
@@ -125,7 +128,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
           {state["slnt"] !== undefined && (
             <Container py="md">
               <Checkbox
-                label="Slant (italic)"
+                label="Italic (slnt)"
                 checked={state["slnt"].active}
                 onChange={(e) => setAxisValue("slnt", {
                   active: e.target.checked,
@@ -180,6 +183,17 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
           }
         </>
       )}
+
+{font.hasItalic && (
+            <Container py="md">
+              <Checkbox
+                label="Italic"
+                checked={italic ?? false}
+                onChange={(e) => setItalic(e.target.checked)}
+              />
+            </Container>
+          )}
+
       <Text>Character sets (default: Latin)</Text>
 
       <Chip.Group multiple value={subsets} onChange={setSubsets}>

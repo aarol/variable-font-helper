@@ -1,29 +1,41 @@
 import jsZip from 'jszip'
 import fileSaver from 'file-saver'
+import { Metadata } from '../../functions/src/metadata'
 
 export async function getVariableFontData() {
   const url = "/getMetadata"
   const res = await fetch(url, { method: "GET", cache: "force-cache" })
-  return await res.json() as VariableFontData
+  return await res.json() as Metadata
+}
+
+
+export type Stylesheet = {
+  raw: string,
+  subset: string,
+  italic: boolean,
+  url: string,
+}
+
+export function fontFaceIdentifier(style: Stylesheet): string {
+  if (style.italic) {
+    return `${style.subset}-italic`
+  } else {
+    return style.subset
+  }
 }
 
 // get the charset and url in separate groups
 const subsetRegex = /\/\*(.*)\*\/[\s\S]*?url\((.*?)\)[\s\S]*?}/g
 
-export type Stylesheet = {
-  raw: string,
-  subset: string,
-  url: string,
-}
-
-export async function getStylesheets(font: string, charsets: string[], axes: Axis[]): Promise<Stylesheet[]> {
-  const url = buildCSS2Url(font, axes)
+export async function getStylesheets(font: string, charsets: string[], axes: Axis[], italic: boolean): Promise<Stylesheet[]> {
+  const url = buildCSS2Url(font, axes, italic)
   const res = await fetch(url).then(r => r.text())
   const matches = [...res.matchAll(subsetRegex)]
   return matches.map((match) => ({
     raw: match[0],
     subset: match[1].trim(),
     url: match[2],
+    italic: match[0].includes("italic"),
   })).filter(sheet => charsets.includes(sheet.subset))
 }
 
@@ -33,7 +45,7 @@ export type Axis = {
 }
 
 // CSS2 API: https://developers.google.com/fonts/docs/css2#api_url_specification
-function buildCSS2Url(font: string, axes: Axis[]) {
+function buildCSS2Url(font: string, axes: Axis[], italic: boolean) {
 
   if (axes.length === 0) {
     return `https://fonts.googleapis.com/css2?family=${font}&display=swap`
@@ -44,21 +56,26 @@ function buildCSS2Url(font: string, axes: Axis[]) {
   // axes need to be sorted alphabetically, lowercase first or else it will error
   axes.sort((a, b) => sortLowercaseFirst(a.tag, b.tag))
 
-  const axisList = axes.map(a => a.tag).join(',')
+  let axisList = axes.map(a => a.tag).join(',')
 
-  const axisValues = axes.map(a => {
+  let axisValues = axes.map(a => {
     if (typeof (a.weight) == 'number') {
       return a.weight.toString()
     } else {
       return `${a.weight[0]}..${a.weight[1]}`
     }
-  })
+  }).join(",")
+
+  if (italic) {
+    axisList = "ital," + axisList
+    axisValues = `0,${axisValues};1,${axisValues}`
+  }
   return `https://fonts.googleapis.com/css2?family=${font}:${axisList}@${axisValues}&display=swap`
 }
 
 export async function downloadAllFiles(fontName: string, styles: Stylesheet[]) {
 
-  const download = (s: Stylesheet) => fetch(s.url).then(r => r.blob()) 
+  const download = (s: Stylesheet) => fetch(s.url).then(r => r.blob())
 
   const fonts = await Promise.all(styles.map(download))
   const zip = jsZip()
@@ -68,7 +85,7 @@ export async function downloadAllFiles(fontName: string, styles: Stylesheet[]) {
     zip.file(`${fontName}.woff2`, fonts[0])
   } else {
     fonts.forEach((font, i) => {
-      zip.file(`${fontName}-${styles[i].subset}.woff2`, font)
+      zip.file(`${fontName}-${fontFaceIdentifier(styles[i])}.woff2`, font)
     })
   }
 
@@ -87,44 +104,4 @@ const sortLowercaseFirst = (a: string, b: string) => {
     return -1
   }
   return 1
-}
-
-export interface VariableFontData {
-  axisRegistry: AxisRegistry[]
-  familyMetadataList: FontFamily[]
-}
-
-export interface AxisRegistry {
-  tag: string
-  min: number
-  defaultValue: number
-  max: number
-  precision: number
-  description: string
-}
-
-export interface FontFamily {
-  family: string
-  category: Category
-  colorCapabilities: string[]
-  designers: string[]
-  displayName: null
-  size: number
-  subsets: string[]
-  axes: FontAxis[]
-  popularity: number,
-}
-
-export interface FontAxis {
-  tag: string
-  min: number
-  max: number
-  defaultValue: number
-}
-
-export enum Category {
-  Display = "Display",
-  Monospace = "Monospace",
-  SansSerif = "Sans Serif",
-  Serif = "Serif",
 }

@@ -1,6 +1,6 @@
 import { Anchor, Button, Group, List, Text, TextInput, Title } from '@mantine/core'
 import { lazy, Suspense, useState } from 'react'
-import { downloadAllFiles, Stylesheet } from '../api'
+import { downloadAllFiles, fontFaceIdentifier, Stylesheet } from '../api'
 const Prism = lazy(() => import('./Prism'))
 
 const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) => {
@@ -12,7 +12,7 @@ const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) 
     return styles.map(style =>
       style.raw.replace(style.url,
         // replace generic url with that of the subset
-        url.replace(fontName, `${fontName}-${style.subset}`) // subset after font name
+        url.replace(fontName, `${fontName}-${fontFaceIdentifier(style)}`)
       )
     ).join('\n')
   }
@@ -29,9 +29,9 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
     <>
       <Title order={2} pb="sm">Output</Title>
       <List>
-        {styles.map(style => (
+        {styles.sort((a,b) => a.subset.localeCompare(b.subset)).map(style => (
           <List.Item key={style.subset}>
-            <Anchor sx={{ overflowWrap: 'break-word' }} href={style.url}>{style.subset}</Anchor>
+            <Anchor sx={{ overflowWrap: 'break-word' }} href={style.url}>{fontFaceIdentifier(style)}</Anchor>
           </List.Item>
         ))}
       </List>
