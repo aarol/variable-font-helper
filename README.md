@@ -6,10 +6,12 @@
 
 ### <https://variable-font-helper.web.app>
 
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/aarol/variable-font-helper/test.yml?label=Tests)
+
+
 ## Stack:
-* [Vite](https://vitejs.dev)
-* React + Typescript
-* [Mantine](https://mantine.dev)
+* React
+* [Mantine UI](https://mantine.dev)
 * Firebase Cloud Functions
 * Firebase Hosting
 
@@ -22,30 +24,10 @@
 
 ## Run locally
 
-### Client
-
-In the "client" directory:
-
-`pnpm i && pnpm dev`
-
-Note: the dev server will call the deployed Cloud Function (see client/vite.config.ts)
-
-### Functions
-
 1. Install firebase-tools
 
 `pnpm add -g firebase-tools`
 
-2. In the "functions" directoy:
+2. Run the client & functions locally
 
-`pnpm i`
-
-3. Then, at the root directory:
-
-`firebase emulators:start --only functions`
-
-Now you can open the Emulator suite and check the function.
-
-## Contributing
-
-Issues/pull requests are welcome!
+`pnpm --recursive dev`
