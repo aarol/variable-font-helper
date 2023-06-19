@@ -1,4 +1,4 @@
-import jsZip from 'jszip'
+
 import fileSaver from 'file-saver'
 import { Metadata } from '../../functions/src/metadata'
 
@@ -78,7 +78,7 @@ export async function downloadAllFiles(fontName: string, styles: Stylesheet[]) {
   const download = (s: Stylesheet) => fetch(s.url).then(r => r.blob())
 
   const fonts = await Promise.all(styles.map(download))
-  const zip = jsZip()
+  const zip = (await import('jszip')).default()
 
   // omit the subset on one font
   if (styles.length === 1) {
