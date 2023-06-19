@@ -1,4 +1,4 @@
-import { Alert, Anchor, AppShell, Autocomplete, AutocompleteItem, Button, Container, MantineProvider, Space, Text } from "@mantine/core";
+import { Alert, Anchor, AppShell, Autocomplete, AutocompleteItem, Button, Collapse, Container, MantineProvider, Space, Text } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import { Footer } from "./components/Footer";
 import { IconExternalLink } from "@tabler/icons-react";
@@ -13,9 +13,17 @@ import { Output } from "./components/Output";
 import { firstLetterUppercase } from "./util";
 import { AxisRegistry, FontFamily, Metadata } from "../../functions/src/metadata";
 
+type AlertMessage = {
+  title: string,
+  content: string,
+}
+
+// used to format designers list
+const listFormatter = new Intl.ListFormat("en")
+
 function App() {
 
-  const [alert, setAlert] = useState<{ title: string, content: string } | null>(null)
+  const [alert, setAlert] = useState<AlertMessage | null>(null)
 
   // Data from API
   const [fontData, setFontData] = useState<Metadata | null>(null)
@@ -85,7 +93,7 @@ function App() {
       .catch((err: Object) => {
         console.log(err);
         setAlert({
-          title: "Error getting data from Google Fonts",
+          title: "Error getting font styles from Google Fonts",
           content: err.toString(),
         })
       })
@@ -121,14 +129,17 @@ function App() {
           {alert !== null && (
             <Alert title={alert.title} my="md" color="red">
               {alert.content}
+              <Text size="sm" pt="md">
+                <span>If this issue persists, please file an issue on </span>
+                <Anchor href="https://github.com/aarol/variable-font-helper/issues/new">Github</Anchor>
+              </Text>
             </Alert>
           )}
 
           {font != undefined ? (
             <>
               <Text size="xl">{font.family}</Text>
-              <Text>By {font.designers.join(", ")}</Text>
-
+              <Text>By {listFormatter.format(font.designers)}</Text>
 
               <Button component="a" target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`} my="sm" variant="outline" leftIcon={<IconExternalLink size={14} />}>
                 Type tester
@@ -144,12 +155,11 @@ function App() {
                 onGenerate={onGenerate}
                 onChange={resetOutput} />
 
-              {stylesheets.length > 0 && (
+              <Collapse in={stylesheets.length > 0}>
                 <Output styles={stylesheets}
                   fontName={font.family.replaceAll(' ', '_')}
                 />
-              )
-              }
+              </Collapse>
             </>
           ) : <Accordions />
           }

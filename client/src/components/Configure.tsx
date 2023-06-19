@@ -25,11 +25,12 @@ function initialAxisState(axes: AxisRegistry[]): AxisState {
       description: axis.description,
     }
   }
-
+  let { min, max } = res['wght']
   res['wght'] = {
     ...res['wght'],
     active: true,
-    value: [300, 800],
+    //      300 or more         800 or less
+    value: [Math.max(min, 300), Math.min(max, 800)],
   }
 
   return res
@@ -66,15 +67,11 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
     onGenerate(axis, subsets, italic ?? false)
   }
 
-  function handleSetMode(mode: "simple" | "advanced") {
-    if (mode === "simple" && isFixed(state["wght"].value)) {
-      state["wght"] = {
-        ...state["wght"],
-        active: true,
-        value: [300, 800],
-      }
+  function handleSetMode(targetMode: "simple" | "advanced") {
+    if (targetMode === "simple") {
+      setState(initialAxisState(axes))
     }
-    setMode(mode)
+    setMode(targetMode)
   }
 
   function setAxisValue(tag: string, s: Partial<AxisState[""]>) {
@@ -184,15 +181,15 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
         </>
       )}
 
-{font.hasItalic && (
-            <Container py="md">
-              <Checkbox
-                label="Italic"
-                checked={italic ?? false}
-                onChange={(e) => setItalic(e.target.checked)}
-              />
-            </Container>
-          )}
+      {font.hasItalic && (
+        <Container py="md">
+          <Checkbox
+            label="Italic"
+            checked={italic ?? false}
+            onChange={(e) => setItalic(e.target.checked)}
+          />
+        </Container>
+      )}
 
       <Text>Character sets (default: Latin)</Text>
 
@@ -219,7 +216,7 @@ function calcSteps(fine: boolean, min: number, max: number) {
   if (fine) {
     return 1
   }
-  let d = Math.abs(max - min)
+  let d = max - min
   if (d < 20) return 1
   if (d < 400) return 5
   return 50

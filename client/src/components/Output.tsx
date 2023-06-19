@@ -1,4 +1,4 @@
-import { Anchor, Button, Group, List, Text, TextInput, Title } from '@mantine/core'
+import { Anchor, Button, Group, List, Text, TextInput, Title, Transition } from '@mantine/core'
 import { lazy, Suspense, useState } from 'react'
 import { downloadAllFiles, fontFaceIdentifier, Stylesheet } from '../api'
 const Prism = lazy(() => import('./Prism'))
@@ -29,8 +29,8 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
     <>
       <Title order={2} pb="sm">Output</Title>
       <List>
-        {styles.sort((a,b) => a.subset.localeCompare(b.subset)).map(style => (
-          <List.Item key={style.subset}>
+        {styles.sort((a, b) => a.subset.localeCompare(b.subset)).map(style => (
+          <List.Item key={fontFaceIdentifier(style)}>
             <Anchor sx={{ overflowWrap: 'break-word' }} href={style.url}>{fontFaceIdentifier(style)}</Anchor>
           </List.Item>
         ))}
