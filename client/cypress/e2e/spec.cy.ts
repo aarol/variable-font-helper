@@ -11,7 +11,7 @@ describe('web app', () => {
     cy.get("input[value=latin-ext]").parent().click()
 
     cy.get("[data-checked=true]").contains("Latin")
-    cy.get("button").last().click()
+    cy.get("button").contains("Generate").click()
     cy.get("main").contains("Output")
 
     cy.get("button").contains("Download All")
@@ -35,7 +35,7 @@ describe('web app', () => {
     cy.get("label").contains("Italic").parent().click()
 
     cy.get("[data-checked=true]").contains("Latin")
-    cy.get("button").last().click()
+    cy.get("button").contains("Generate").click()
     cy.get("main").contains("Output")
 
     cy.get("button").contains("Download All")
