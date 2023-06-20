@@ -89,7 +89,7 @@ export async function downloadAllFiles(fontName: string, styles: Stylesheet[]) {
     })
   }
 
-  zip.generateAsync({ type: 'blob' }).then(zipFile => {
+  await zip.generateAsync({ type: 'blob' }).then(zipFile => {
     fileSaver.saveAs(zipFile, `${fontName}.zip`)
   })
 }

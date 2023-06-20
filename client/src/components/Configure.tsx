@@ -7,6 +7,7 @@ import { AxisRegistry, FontFamily } from "../../../functions/src/metadata";
 export type AxisState = {
   [tag: string]: {
     active: boolean,
+    //               min     max
     value: number | [number, number],
     min: number, max: number,
     description: string,
@@ -29,6 +30,8 @@ function initialAxisState(axes: AxisRegistry[]): AxisState {
   res['wght'] = {
     ...res['wght'],
     active: true,
+    // some fonts have a higher min value than 300 or vice versa
+    // clamp the weights so that they are within [min,max]
     //      300 or more         800 or less
     value: [Math.max(min, 300), Math.min(max, 800)],
   }
