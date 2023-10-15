@@ -1,7 +1,8 @@
-import { Anchor, Button, Group, List, Text, TextInput, Title, Transition } from '@mantine/core'
-import { lazy, Suspense, useState } from 'react'
+import { Anchor, Button, Divider, Group, List, TextInput, Title } from '@mantine/core'
+import { useState } from 'react'
 import { downloadAllFiles, fontFaceIdentifier, Stylesheet } from '../api'
-const Prism = lazy(() => import('./Prism'))
+import Highlight from './Highlight'
+import '@mantine/code-highlight/styles.css'
 
 const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) => {
   if (styles.length == 0) return ''
@@ -25,13 +26,16 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
   const downloadFonts = async () => {
     downloadAllFiles(fontName, styles)
   }
+
+  const css = renderStylesheets(styles, url, fontName)
+
   return (
     <>
       <Title order={2} pb="sm">Output</Title>
       <List>
         {styles.sort((a, b) => a.subset.localeCompare(b.subset)).map(style => (
           <List.Item key={fontFaceIdentifier(style)}>
-            <Anchor sx={{ overflowWrap: 'break-word' }} href={style.url}>{fontFaceIdentifier(style)}</Anchor>
+            <Anchor styles={{ root: { overflowWrap: 'break-word' } }} href={style.url}>{fontFaceIdentifier(style)}</Anchor>
           </List.Item>
         ))}
       </List>
@@ -39,11 +43,7 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
         <Button onClick={downloadFonts}>Download All</Button>
       </Group>
       <TextInput value={url} label="CSS import url" onChange={(e) => setUrl(e.target.value)} />
-      <Suspense fallback={<Text>Loading...</Text>}>
-        <Prism language='css'>
-          {renderStylesheets(styles, url, fontName)}
-        </Prism>
-      </Suspense>
+      <Highlight my="sm" key={css} language="css" code={css} />
     </>
   )
 }
