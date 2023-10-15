@@ -1,5 +1,5 @@
-import { Alert, Anchor, AppShell, Autocomplete, AutocompleteItem, Button, Collapse, Container, MantineProvider, Space, Text } from "@mantine/core";
-import { useColorScheme } from "@mantine/hooks";
+import { Alert, Anchor, AppShell, Autocomplete, Button, Collapse, Container, MantineProvider, Space, Text } from "@mantine/core";
+import '@mantine/core/styles.css';
 import { Footer } from "./components/Footer";
 import { IconExternalLink } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
@@ -66,8 +66,8 @@ function App() {
       })
   }, [])
 
-  const onSelectFont = (item: AutocompleteItem) => {
-    setFont(fontData?.familyMetadataList.find(a => a.family === item.value))
+  const onSelectFont = (item: string) => {
+    setFont(fontData?.familyMetadataList.find(a => a.family === item))
 
     resetOutput()
   }
@@ -99,29 +99,26 @@ function App() {
       })
   }
 
-  const colorScheme = useColorScheme()
-
   return (
     <MantineProvider theme={{
-      colorScheme,
       headings: {
         fontFamily: 'Inter, sans-serif'
       },
       primaryColor: 'indigo'
-    }} withNormalizeCSS withGlobalStyles>
+    }} defaultColorScheme="auto">
       <AppShell padding={"xl"}>
         <Container size="sm">
           <FontTitle />
-          <Text align="center" pb="md">Self host variable fonts from
+          <Text ta="center" pb="md">Self host variable fonts from
             <Anchor href="https://fonts.google.com/?vfonly=true" target="_blank"> Google Fonts</Anchor>
           </Text>
 
           <Autocomplete
-            data={fontData?.familyMetadataList.map(f => ({ value: f.family })) ?? []}
+            data={fontData?.familyMetadataList.map(f => f.family) ?? []}
             label="Select your variable font"
             size="md"
             placeholder="Roboto Flex"
-            onItemSubmit={onSelectFont}
+            onChange={onSelectFont}
           />
 
           <Space h="md" />
@@ -141,7 +138,7 @@ function App() {
               <Text size="xl">{font.family}</Text>
               <Text>By {listFormatter.format(font.designers)}</Text>
 
-              <Button component="a" target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`} my="sm" variant="outline" leftIcon={<IconExternalLink size={14} />}>
+              <Button component="a" target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`} my="sm" variant="outline" leftSection={<IconExternalLink size={14} />}>
                 Type tester
               </Button>
 

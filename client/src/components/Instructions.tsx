@@ -23,7 +23,7 @@ export const Instructions = () => (
           </List.Item>
           <List.Item py="sm">
             Download the fonts and move them into your website's static or public directory so that they're accessible with relative imports.
-            <Text weight={600}>
+            <Text fw={600}>
               Test this by opening the expected url in your browser.
             </Text>
           </List.Item>

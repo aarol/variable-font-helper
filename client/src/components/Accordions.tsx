@@ -1,12 +1,13 @@
 import { Accordion, Anchor, Blockquote, Code, Text } from "@mantine/core";
 import image from '../googlefonts.png';
+import { IconInfoCircle } from "@tabler/icons-react";
 
 export const Accordions = () => (
   <Accordion>
     <Accordion.Item value="what">
       <Accordion.Control>What are variable fonts?</Accordion.Control>
       <Accordion.Panel>
-        <Blockquote sx={{fontSize: '1em'}}>
+        <Blockquote icon={<IconInfoCircle />} my="lg">
           Variable fonts are an evolution of the OpenType font specification that enables many different variations of a typeface to be incorporated into a single file, rather than having a separate font file for every width, weight, or style. They let you access all the variations contained in a given font file via CSS and a single @font-face reference.
           <br /> - MDN
         </Blockquote>

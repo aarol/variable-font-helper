@@ -65,7 +65,6 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
     const axis = Object.entries(state)
       .filter(([_, s]) => s.active) // only active
       .map(([tag, v]) => ({ tag, weight: v.value })) // tag and weight
-    console.log(axis);
 
     onGenerate(axis, subsets, italic ?? false)
   }
@@ -89,6 +88,14 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
     setAxisValue(tag, {
       "value": fixed ? state[tag].min : [state[tag].min, state[tag].max]
     })
+  }
+
+  function handleToggleAllSubsets(showAll: boolean) {
+    if(showAll) {
+      setSubsets(font.subsets)
+    } else {
+      setSubsets([])
+    }
   }
 
   return (
@@ -136,12 +143,14 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
               />
             </Container>
           )}
+          <Divider my="sm" />
         </>
       ) : (
+        // advanced
         <>
           {
             Object.entries(state).map(([tag, state]) => (
-              <Container key={tag} py={"sm"}>
+              <Container key={tag} my={"sm"}>
                 <Group mb="sm">
                   <Checkbox
                     checked={state.active ?? false}
@@ -177,7 +186,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
                     )}
                   </>
                 )}
-                <Divider mt="" />
+                <Divider my="sm" />
               </Container>
             ))
           }
@@ -194,12 +203,18 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
         </Container>
       )}
 
-      <Text>Character sets (default: Latin)</Text>
+      <Group justify="space-between">
+        <Text>Character sets</Text>
+        <Checkbox checked={font.subsets.length == subsets.length} label="All" 
+        onChange={e => handleToggleAllSubsets(e.currentTarget.checked)} />
+      </Group>
 
       <Chip.Group multiple value={subsets} onChange={setSubsets}>
-        <Group spacing="sm" py="sm">
+        <Group mt={5} mb="sm" gap="sm">
           {font.subsets.map(subset => (
-            <Chip key={subset} value={subset}>{firstLetterUppercase(subset)}</Chip>
+            <Chip key={subset} value={subset}
+
+            >{firstLetterUppercase(subset)}</Chip>
           ))}
         </Group>
       </Chip.Group>

@@ -5,7 +5,7 @@ export const Footer = () => (
   <Container py="md">
     <Anchor 
     href="https://github.com/aarol/variable-font-helper"
-    sx={{justifyContent: 'end', display: 'flex', fontFamily: 'Inter, sans-serif'}}>
+    styles={{root: {justifyContent: 'end', display: 'flex', fontFamily: 'Inter, sans-serif'}}}>
       <IconBrandGithub size={28} />
       Github
     </Anchor>

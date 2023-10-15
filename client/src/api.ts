@@ -5,9 +5,11 @@ import { Metadata } from '../../functions/src/metadata'
 export async function getVariableFontData() {
   const url = "/getMetadata"
   const res = await fetch(url, { method: "GET", cache: "force-cache" })
+  if (res.status >= 400) {
+    throw new Error(`Received response ${res.status}: ${res.statusText}`)
+  }
   return await res.json() as Metadata
 }
-
 
 export type Stylesheet = {
   raw: string,
