@@ -1,7 +1,7 @@
-import { Anchor, Button, Divider, Group, List, TextInput, Title } from '@mantine/core'
-import { useState } from 'react'
+import { Anchor, Button, Group, List, Text, TextInput, Title } from '@mantine/core'
+import React, { Suspense, useState } from 'react'
 import { downloadAllFiles, fontFaceIdentifier, Stylesheet } from '../api'
-import Highlight from './Highlight'
+const Highlight = React.lazy(() => import('./Highlight'))
 import '@mantine/code-highlight/styles.css'
 
 const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) => {
@@ -43,7 +43,9 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
         <Button onClick={downloadFonts}>Download All</Button>
       </Group>
       <TextInput value={url} label="CSS import url" onChange={(e) => setUrl(e.target.value)} />
-      <Highlight my="sm" key={css} language="css" code={css} />
+      <Suspense fallback={<Text>Loading...</Text>}>
+        <Highlight my="sm" key={css} language="css" code={css} />
+      </Suspense>
     </>
   )
 }
