@@ -12,7 +12,7 @@ describe('web app', () => {
 
     cy.get("[data-checked=true]").contains("Latin")
     cy.get("button").contains("Generate").click()
-    cy.get("main").contains("Output")
+    cy.get("h2").contains("Output")
 
     cy.get("button").contains("Download All")
 
@@ -36,7 +36,7 @@ describe('web app', () => {
 
     cy.get("[data-checked=true]").contains("Latin")
     cy.get("button").contains("Generate").click()
-    cy.get("main").contains("Output")
+    cy.get("h2").contains("Output")
 
     cy.get("button").contains("Download All")
 
