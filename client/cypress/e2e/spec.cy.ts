@@ -5,8 +5,8 @@ describe('web app', () => {
     cy.visit('/')
 
     cy.request("/getMetadata")
-    
-    cy.get("input").last().focus().type("Inter{downArrow}{enter}", {delay: 200})
+
+    cy.get("input").last().focus().type("Inter{downArrow}{enter}", { delay: 200 })
 
     cy.get("input[value=latin-ext]").parent().click()
 
@@ -28,7 +28,7 @@ describe('web app', () => {
 
     cy.request("/getMetadata")
 
-    cy.get("input").last().focus().type("Inter Tight{downArrow}{enter}", {delay: 200})
+    cy.get("input").last().focus().type("Inter Tight{downArrow}{enter}", { delay: 200 })
 
     cy.get("input[value=latin-ext]").parent().click()
 
@@ -47,5 +47,15 @@ describe('web app', () => {
     cy.get("pre").should("contain.text", "/* latin */").and('contain.text', "italic")
     cy.get("pre").should("contain.text", "/* latin-ext */").and('contain.text', "normal")
     cy.get("pre").should("contain.text", "/* latin-ext */").and('contain.text', "italic")
+  })
+
+  it("supports advanced settings", () => {
+    cy.visit("/")
+
+    cy.request("/getMetadata")
+
+    cy.get("input").last().focus().type("Roboto F{downArrow}{enter}", { delay: 200 })
+
+    cy.get('[type="radio"][value="all"]').check()
   })
 })

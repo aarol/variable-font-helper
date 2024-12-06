@@ -1,8 +1,8 @@
-import { Button, Checkbox, Chip, Container, DefaultMantineColor, Divider, Group, RangeSlider, SegmentedControl, Slider, Space, Text, Title, Tooltip } from "@mantine/core";
+import { Button, Checkbox, Chip, Container, type DefaultMantineColor, Divider, Group, RangeSlider, SegmentedControl, Slider, Space, Text, Title, Tooltip } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Axis, } from "../api";
+import type { Axis, } from "../api";
 import { firstLetterUppercase } from "../util";
-import { AxisRegistry, FontFamily } from "../../../functions/src/metadata";
+import type { AxisRegistry, FontFamily } from "../../../functions/src/metadata";
 
 export type AxisState = {
   [tag: string]: {
@@ -26,7 +26,7 @@ function initialAxisState(axes: AxisRegistry[]): AxisState {
       description: axis.description,
     }
   }
-  let { min, max } = res['wght']
+  const { min, max } = res['wght']
   res['wght'] = {
     ...res['wght'],
     active: true,
@@ -43,7 +43,7 @@ type ConfigureProps = {
   font: FontFamily,
   axes: AxisRegistry[],
   submitColor: DefaultMantineColor | undefined,
-  onGenerate: (axis: Axis[], subsets: string[], italic: boolean) => void,
+  onGenerate: (fontFamily: string, axis: Axis[], subsets: string[], italic: boolean) => void,
   onChange: () => void,
 }
 
@@ -58,6 +58,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
 
   const [italic, setItalic] = useState<boolean | undefined>()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: notifies parent of changed state
   useEffect(onChange, [state, subsets, italic])
 
   function onSubmit() {
@@ -66,7 +67,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       .filter(([_, s]) => s.active) // only active
       .map(([tag, v]) => ({ tag, weight: v.value })) // tag and weight
 
-    onGenerate(axis, subsets, italic ?? false)
+    onGenerate(font.family, axis, subsets, italic ?? false)
   }
 
   function handleSetMode(targetMode: "simple" | "advanced") {
@@ -91,7 +92,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
   }
 
   function handleToggleAllSubsets(showAll: boolean) {
-    if(showAll) {
+    if (showAll) {
       setSubsets(font.subsets)
     } else {
       setSubsets([])
@@ -205,8 +206,8 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
 
       <Group justify="space-between">
         <Text>Character sets</Text>
-        <Checkbox checked={font.subsets.length == subsets.length} label="All" 
-        onChange={e => handleToggleAllSubsets(e.currentTarget.checked)} />
+        <Checkbox checked={font.subsets.length === subsets.length} label="All"
+          onChange={e => handleToggleAllSubsets(e.currentTarget.checked)} />
       </Group>
 
       <Chip.Group multiple value={subsets} onChange={setSubsets}>
@@ -234,7 +235,7 @@ function calcSteps(fine: boolean, min: number, max: number) {
   if (fine) {
     return 1
   }
-  let d = max - min
+  const d = max - min
   if (d < 20) return 1
   if (d < 400) return 5
   return 50

@@ -3,7 +3,7 @@ import '@mantine/core/styles.css';
 import { Footer } from "./components/Footer";
 import { IconExternalLink } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
-import { Axis, getStylesheets, getVariableFontData, Stylesheet } from "./api";
+import { type Axis, getStylesheets, getVariableFontData, type Stylesheet } from "./api";
 
 import { Accordions } from "./components/Accordions";
 import { Configure } from "./components/Configure";
@@ -11,7 +11,7 @@ import { FontTitle } from "./components/FontTitle";
 import { Instructions } from "./components/Instructions";
 import { Output } from "./components/Output";
 import { firstLetterUppercase } from "./util";
-import { AxisRegistry, FontFamily, Metadata } from "../../functions/src/metadata";
+import type { AxisRegistry, FontFamily, Metadata } from "../../functions/src/metadata";
 
 type AlertMessage = {
   title: string,
@@ -37,13 +37,15 @@ function App() {
   const fontAxes: AxisRegistry[] = useMemo(() => {
     return font?.axes.map((axis) => {
       const reg = fontData?.axisRegistry.find((r) => r.tag === axis.tag)
-      return ({
-        ...axis,
-        displayName: reg!.displayName,
-        precision: reg!.precision,
-        description: reg!.description
-      });
-    }) ?? []
+      if (reg) {
+        return ({
+          ...axis,
+          displayName: reg.displayName,
+          precision: reg.precision,
+          description: reg.description
+        });
+      }
+    }).filter((axis): axis is AxisRegistry => axis !== undefined) ?? []
   }, [fontData, font])
 
   useEffect(() => {
@@ -57,7 +59,7 @@ function App() {
 
     getVariableFontData()
       .then(setFontData)
-      .catch((err: Object) => {
+      .catch((err) => {
         console.log(err)
         setAlert({
           title: "Failed to get font data",
@@ -76,7 +78,7 @@ function App() {
     setStylesheets([])
   }
 
-  const onGenerate = (axes: Axis[], subsets: string[], italic: boolean) => {
+  const onGenerate = (fontFamily: string, axes: Axis[], subsets: string[], italic: boolean) => {
     resetOutput()
 
     setAlert(null)
@@ -88,9 +90,9 @@ function App() {
       })
       return
     }
-    getStylesheets(font!.family, subsets, axes, italic)
+    getStylesheets(fontFamily, subsets, axes, italic)
       .then(setStylesheets)
-      .catch((err: Object) => {
+      .catch((err) => {
         console.log(err);
         setAlert({
           title: "Error getting font styles from Google Fonts",
@@ -133,7 +135,7 @@ function App() {
             </Alert>
           )}
 
-          {font != undefined ? (
+          {font !== undefined ? (
             <>
               <Text size="xl">{font.family}</Text>
               <Text>By {listFormatter.format(font.designers)}</Text>

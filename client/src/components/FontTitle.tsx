@@ -6,13 +6,13 @@ export function FontTitle() {
 
   return (
     <>
-      <Title ta="center" py="sm" order={2} styles={{root: {fontWeight: titleSize}}}>
+      <Title ta="center" py="sm" order={2} styles={{ root: { fontWeight: titleSize } }}>
         Variable font helper
       </Title>
       <Slider
         size="sm"
         pb="lg"
-        styles={{root: {maxWidth: 200, margin: '0 auto' }}}
+        styles={{ root: { maxWidth: 200, margin: '0 auto' } }}
         label={null}
         value={titleSize}
         min={100}
