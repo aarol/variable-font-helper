@@ -44,7 +44,7 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
       </Group>
       <TextInput value={url} label="CSS import url" onChange={(e) => setUrl(e.target.value)} />
       <Suspense fallback={<Text>Loading...</Text>}>
-        <Highlight my="sm" key={css} language="css" code={css} />
+        <Highlight my="sm" key={css} language="css" code={css} copyLabel='Copy CSS' />
       </Suspense>
     </>
   )

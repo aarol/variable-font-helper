@@ -107,10 +107,10 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       <Group>
         <SegmentedControl
           value={mode}
-          onChange={handleSetMode}
+          onChange={m => handleSetMode(m as 'simple' | 'advanced')}
           data={[
             { label: 'Simple', value: 'simple' },
-            { label: 'Advanced', value: 'all' }
+            { label: 'Advanced', value: 'advanced' }
           ]}
         />
         <Checkbox label="Fine tune" checked={fineTune} onChange={(e) => setFineTune(e.target.checked)} />
@@ -221,7 +221,9 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       </Chip.Group>
 
       <Divider py="md" />
-      <Button color={submitColor}
+      <Button
+        color={submitColor}
+        disabled={subsets.length === 0}
         onClick={onSubmit} mb="md">Generate output</Button>
     </>
   )

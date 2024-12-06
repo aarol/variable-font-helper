@@ -1,6 +1,6 @@
 # Variable fonts helper
 
-### Self host variable fonts from Google Fonts
+## Self host variable fonts from Google Fonts
 
 ![Screenshot of the variable font helper web app](screenshot.png)
 
@@ -8,12 +8,12 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/aarol/variable-font-helper/test.yml?label=Tests)
 
+## Stack
 
-## Stack:
-* React
-* [Mantine UI](https://mantine.dev)
-* Firebase Cloud Functions
-* Firebase Hosting
+- React
+- [Mantine UI](https://mantine.dev)
+- Firebase Cloud Functions
+- Firebase Hosting
 
 ## How it works
 
@@ -25,9 +25,12 @@
 ## Run locally
 
 1. Install firebase-tools
-
-`pnpm add -g firebase-tools`
+  
+  `pnpm add -g firebase-tools`
 
 2. Run the client & functions locally
 
 `pnpm --recursive dev`
+
+### Deploy
+
