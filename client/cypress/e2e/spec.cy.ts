@@ -56,6 +56,6 @@ describe('web app', () => {
 
     cy.get("input").last().focus().type("Roboto F{downArrow}{enter}", { delay: 200 })
 
-    cy.get('[type="radio"][value="all"]').check()
+    cy.get('[type="checkbox"][id="cy-all-checkbox"]').check()
   })
 })

@@ -206,7 +206,7 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
 
       <Group justify="space-between">
         <Text>Character sets</Text>
-        <Checkbox checked={font.subsets.length === subsets.length} label="All"
+        <Checkbox checked={font.subsets.length === subsets.length} id="cy-all-checkbox" label="All"
           onChange={e => handleToggleAllSubsets(e.currentTarget.checked)} />
       </Group>
 

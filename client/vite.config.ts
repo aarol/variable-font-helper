@@ -11,5 +11,11 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
+  },
+  resolve: {
+    alias : {
+      // Without this, the Vite bundles 5000+ tiny chunks in dev mode which destroys performance
+      '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
+    }
   }
 })
