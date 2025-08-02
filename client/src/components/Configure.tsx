@@ -42,12 +42,12 @@ function initialAxisState(axes: AxisRegistry[]): AxisState {
 type ConfigureProps = {
   font: FontFamily,
   axes: AxisRegistry[],
-  submitColor: DefaultMantineColor | undefined,
+  showGenerate: boolean,
   onGenerate: (fontFamily: string, axis: Axis[], subsets: string[], italic: boolean) => void,
   onChange: () => void,
 }
 
-export function Configure({ onChange, font, axes, submitColor, onGenerate }: ConfigureProps) {
+export function Configure({ onChange, font, axes, showGenerate, onGenerate }: ConfigureProps) {
 
   const [state, setState] = useState<AxisState>(initialAxisState(axes))
   const [mode, setMode] = useState<"simple" | "advanced">('simple')
@@ -221,10 +221,11 @@ export function Configure({ onChange, font, axes, submitColor, onGenerate }: Con
       </Chip.Group>
 
       <Divider py="md" />
-      <Button
-        color={submitColor}
-        disabled={subsets.length === 0}
-        onClick={onSubmit} mb="md">Generate output</Button>
+      {showGenerate ? (
+        <Button
+          disabled={subsets.length === 0}
+          onClick={onSubmit} mb="md">Generate 🪄</Button>
+      ) : undefined}
     </>
   )
 }

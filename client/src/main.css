@@ -1,10 +1,13 @@
+@import url('highlight.js/styles/stackoverflow-dark.min.css') screen and (prefers-color-scheme: dark);
+@import url('highlight.js/styles/stackoverflow-light.min.css') screen and (prefers-color-scheme: light);
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
   src:
-    url('../Inter.woff2') format('woff2');
+    url('/Inter.woff2') format('woff2');
 }
 
 :root {

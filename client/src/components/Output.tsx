@@ -21,7 +21,7 @@ const renderStylesheets = (styles: Stylesheet[], url: string, fontName: string) 
 
 export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: string }) => {
 
-  const [url, setUrl] = useState(`../${fontName}.woff2`)
+  const [url, setUrl] = useState(`/${fontName}.woff2`)
 
   const downloadFonts = async () => {
     downloadAllFiles(fontName, styles)
@@ -44,7 +44,7 @@ export const Output = ({ styles, fontName }: { styles: Stylesheet[], fontName: s
       </Group>
       <TextInput value={url} label="CSS import url" onChange={(e) => setUrl(e.target.value)} />
       <Suspense fallback={<Text>Loading...</Text>}>
-        <Highlight my="sm" key={css} language="css" code={css} copyLabel='Copy CSS' />
+        <Highlight code={css} />
       </Suspense>
     </>
   )

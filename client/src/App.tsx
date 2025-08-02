@@ -150,7 +150,7 @@ function App() {
                 key={font.family} // to refresh config on font family change
                 axes={fontAxes}
                 font={font}
-                submitColor={stylesheets.length !== 0 ? 'gray' : undefined}
+                showGenerate={stylesheets.length === 0}
                 onGenerate={onGenerate}
                 onChange={resetOutput} />
 
