@@ -26,16 +26,17 @@ function initialAxisState(axes: AxisRegistry[]): AxisState {
       description: axis.description,
     }
   }
-  const { min, max } = res['wght']
-  res['wght'] = {
-    ...res['wght'],
-    active: true,
-    // some fonts have a higher min value than 300 or vice versa
-    // clamp the weights so that they are within [min,max]
-    //      300 or more         800 or less
-    value: [Math.max(min, 300), Math.min(max, 800)],
+  if ('wght' in res) {
+    const { min, max } = res['wght']
+    res['wght'] = {
+      ...res['wght'],
+      active: true,
+      // some fonts have a higher min value than 300 or vice versa
+      // clamp the weights so that they are within [min,max]
+      //      300 or more         800 or less
+      value: [Math.max(min, 300), Math.min(max, 800)],
+    }
   }
-
   return res
 }
 
@@ -118,21 +119,23 @@ export function Configure({ onChange, font, axes, showGenerate, onGenerate }: Co
       </Group>
       {mode === 'simple' ? (
         <>
-          <Container mb="md">
-            <Group py="sm">
-              <Text>Weight</Text>
-            </Group>
-            <RangeSlider
-              min={state['wght'].min}
-              minRange={1}
-              max={state['wght'].max}
-              step={calcSteps(fineTune, state['wght'].min, state['wght'].max)}
-              value={state['wght'].value as [number, number]} // type is set in `handleSetMode` 
-              onChange={(v) => setAxisValue('wght', {
-                value: v
-              })}
-            />
-          </Container>
+          {'wght' in state &&
+            <Container mb="md">
+              <Group py="sm">
+                <Text>Weight</Text>
+              </Group>
+              <RangeSlider
+                min={state['wght'].min}
+                minRange={1}
+                max={state['wght'].max}
+                step={calcSteps(fineTune, state['wght'].min, state['wght'].max)}
+                value={state['wght'].value as [number, number]} // type is set in `handleSetMode`
+                onChange={(v) => setAxisValue('wght', {
+                  value: v
+                })}
+              />
+            </Container>
+          }
           {state["slnt"] !== undefined && (
             <Container py="md">
               <Checkbox
