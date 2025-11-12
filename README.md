@@ -25,7 +25,7 @@
 ## Run locally
 
 1. Install firebase-tools
-  
+
   `pnpm add -g firebase-tools`
 
 2. Run the client & functions locally
@@ -34,3 +34,4 @@
 
 ### Deploy
 
+`firebase deploy --only hosting,functions`

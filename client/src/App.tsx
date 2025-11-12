@@ -12,6 +12,7 @@ import { Instructions } from "./components/Instructions";
 import { Output } from "./components/Output";
 import { firstLetterUppercase } from "./util";
 import type { AxisRegistry, FontFamily, Metadata } from "../../functions/src/metadata";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 type AlertMessage = {
   title: string,
@@ -110,59 +111,61 @@ function App() {
     }} defaultColorScheme="auto">
       <AppShell padding={"xl"}>
         <Container size="sm">
-          <FontTitle />
-          <Text ta="center" pb="md">Self host variable fonts from
-            <Anchor href="https://fonts.google.com/?vfonly=true" target="_blank"> Google Fonts</Anchor>
-          </Text>
+          <ErrorBoundary>
 
-          <Autocomplete
-            data={fontData?.familyMetadataList.map(f => f.family) ?? []}
-            label="Select your variable font"
-            size="md"
-            placeholder="Roboto Flex"
-            onChange={onSelectFont}
-          />
+            <FontTitle />
+            <Text ta="center" pb="md">Self host variable fonts from <Anchor href="https://fonts.google.com/?vfonly=true" target="_blank">Google Fonts</Anchor>
+            </Text>
 
-          <Space h="md" />
+            <Autocomplete
+              data={fontData?.familyMetadataList.map(f => f.family) ?? []}
+              label="Select your variable font"
+              size="md"
+              placeholder="Roboto Flex"
+              onChange={onSelectFont}
+            />
 
-          {alert !== null && (
-            <Alert title={alert.title} my="md" color="red">
-              {alert.content}
-              <Text size="sm" pt="md">
-                <span>If this issue persists, please file an issue on </span>
-                <Anchor href="https://github.com/aarol/variable-font-helper/issues/new">Github</Anchor>
-              </Text>
-            </Alert>
-          )}
+            <Space h="md" />
 
-          {font !== undefined ? (
-            <>
-              <Text size="xl">{font.family}</Text>
-              <Text>By {listFormatter.format(font.designers)}</Text>
+            {alert !== null && (
+              <Alert title={alert.title} my="md" color="red">
+                {alert.content}
+                <Text size="sm" pt="md">
+                  <span>If this issue persists, please file an issue on </span>
+                  <Anchor href="https://github.com/aarol/variable-font-helper/issues/new">Github</Anchor>
+                </Text>
+              </Alert>
+            )}
 
-              <Button component="a" target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`} my="sm" variant="outline" leftSection={<IconExternalLink size={14} />}>
-                Type tester
-              </Button>
+            {font !== undefined ? (
+              <>
+                <Text size="xl">{font.family}</Text>
+                <Text>By {listFormatter.format(font.designers)}</Text>
 
-              <Instructions />
+                <Button component="a" target="_blank" href={`https://fonts.google.com/specimen/${firstLetterUppercase(font.family)}/tester`} my="sm" variant="outline" leftSection={<IconExternalLink size={14} />}>
+                  Type tester
+                </Button>
 
-              <Configure
-                key={font.family} // to refresh config on font family change
-                axes={fontAxes}
-                font={font}
-                showGenerate={stylesheets.length === 0}
-                onGenerate={onGenerate}
-                onChange={resetOutput} />
+                <Instructions />
 
-              <Collapse in={stylesheets.length > 0}>
-                <Output styles={stylesheets}
-                  fontName={font.family.replaceAll(' ', '_')}
-                />
-              </Collapse>
-            </>
-          ) : <Accordions />
-          }
-          <Footer />
+                <Configure
+                  key={font.family} // to refresh config on font family change
+                  axes={fontAxes}
+                  font={font}
+                  showGenerate={stylesheets.length === 0}
+                  onGenerate={onGenerate}
+                  onChange={resetOutput} />
+
+                <Collapse in={stylesheets.length > 0}>
+                  <Output styles={stylesheets}
+                    fontName={font.family.replaceAll(' ', '_')}
+                  />
+                </Collapse>
+              </>
+            ) : <Accordions />
+            }
+            <Footer />
+          </ErrorBoundary>
         </Container>
       </AppShell>
     </MantineProvider>
